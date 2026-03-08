@@ -5,42 +5,154 @@
 
 <h3 class="mb-4">Dashboard</h3>
 
-<div class="row">
-    <div class="col-md-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h6>Total de Produtos</h6>
-                <h3>{{ total_products }}</h3>
-            </div>
-        </div>
-    </div>
+<div class="row mb-4">
 
-    <div class="col-md-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h6>Total de Categorias</h6>
-                <h3>{{ total_categories }}</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h6>Produtos Ativos</h6>
-                <h3>{{ active_products }}</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h6>Produtos Inativos</h6>
-                <h3>{{ inactive_products }}</h3>
-            </div>
-        </div>
-    </div>
+<div class="col-md-3">
+<div class="card">
+<div class="card-body text-center">
+<h6>Total de Produtos</h6>
+<h3>{{ total_products }}</h3>
 </div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card">
+<div class="card-body text-center">
+<h6>Total de Categorias</h6>
+<h3>{{ total_categories }}</h3>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card">
+<div class="card-body text-center">
+<h6>Total de Vendas</h6>
+<h3>{{ total_sales }}</h3>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card">
+<div class="card-body text-center">
+<h6>Faturamento Total</h6>
+<h3>R$ {{ total_revenue }}</h3>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="row mb-4">
+
+<div class="col-md-3">
+<div class="card">
+<div class="card-body text-center">
+<h6>Vendas Hoje</h6>
+<h3>{{ sales_today }}</h3>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card">
+<div class="card-body text-center">
+<h6>Faturamento Hoje</h6>
+<h3>R$ {{ revenue_today }}</h3>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card">
+<div class="card-body text-center">
+<h6>Vendas do Mês</h6>
+<h3>{{ sales_month }}</h3>
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card">
+<div class="card-body text-center">
+<h6>Faturamento do Mês</h6>
+<h3>R$ {{ revenue_month }}</h3>
+</div>
+</div>
+</div>
+
+</div>
+
+<h4 class="mt-4">Últimas Vendas</h4>
+
+<table class="table">
+<thead>
+<tr>
+<th>ID</th>
+<th>Data</th>
+<th>Total</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for sale in latest_sales %}
+<tr>
+<td>{{ sale.id }}</td>
+<td>{{ sale.date }}</td>
+<td>R$ {{ sale.total }}</td>
+<td>{{ sale.status }}</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+<h4 class="mt-4">Top Produtos Vendidos</h4>
+
+<table class="table">
+<thead>
+<tr>
+<th>Produto</th>
+<th>Quantidade Vendida</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for product in top_products %}
+<tr>
+<td>{{ product.product__name }}</td>
+<td>{{ product.total_sold }}</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+<h4 class="mt-4">Estoque Baixo</h4>
+
+<table class="table">
+<thead>
+<tr>
+<th>Produto</th>
+<th>Estoque</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for product in low_stock_products %}
+<tr>
+<td>{{ product.name }}</td>
+<td>{{ product.stock }}</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
 
 {% endblock %}
