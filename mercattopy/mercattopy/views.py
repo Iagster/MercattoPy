@@ -1,29 +1,30 @@
 from django.shortcuts import render
 from django.db.models import Sum
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 from catalog.models import Product, Category
 from sales.models import Sale, SaleItem
 
 
+@login_required
 def dashboard(request):
 
     today = timezone.now().date()
     month = timezone.now().month
     year = timezone.now().year
 
-    # KPIs principais
+    # KPIs
     total_products = Product.objects.count()
     total_categories = Category.objects.count()
+
     total_sales = Sale.objects.filter(status='completed').count()
 
     total_revenue = Sale.objects.filter(
         status='completed'
-    ).aggregate(
-        total=Sum('total')
-    )['total'] or 0
+    ).aggregate(total=Sum('total'))['total'] or 0
 
-    # vendas hoje
+    # Hoje
     sales_today = Sale.objects.filter(
         status='completed',
         date__date=today
@@ -32,11 +33,9 @@ def dashboard(request):
     revenue_today = Sale.objects.filter(
         status='completed',
         date__date=today
-    ).aggregate(
-        total=Sum('total')
-    )['total'] or 0
+    ).aggregate(total=Sum('total'))['total'] or 0
 
-    # vendas do mês
+    # Mês
     sales_month = Sale.objects.filter(
         status='completed',
         date__month=month,
@@ -47,14 +46,12 @@ def dashboard(request):
         status='completed',
         date__month=month,
         date__year=year
-    ).aggregate(
-        total=Sum('total')
-    )['total'] or 0
+    ).aggregate(total=Sum('total'))['total'] or 0
 
-    # últimas vendas
+    # Últimas vendas
     latest_sales = Sale.objects.order_by('-date')[:5]
 
-    # top produtos vendidos
+    # Top produtos
     top_products = (
         SaleItem.objects
         .values('product__name')
@@ -62,7 +59,7 @@ def dashboard(request):
         .order_by('-total_sold')[:5]
     )
 
-    # alertas de estoque baixo
+    # Estoque baixo
     low_stock_products = Product.objects.filter(stock__lte=3)
 
     context = {

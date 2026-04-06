@@ -1,8 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-
 from .models import Category, Product
 from .forms import ProductForm
+from django.contrib.auth.decorators import login_required
+from .decorators import admin_required
+
+@login_required
+@admin_required
+def product_delete(request, product_id):
+    pass
 
 def category_list(request):
     categories = Category.objects.all()
@@ -77,3 +83,4 @@ def product_delete(request, product_id):
     return render(request, 'catalog/product_confirm_delete.html', {
         'product': product
     })
+
