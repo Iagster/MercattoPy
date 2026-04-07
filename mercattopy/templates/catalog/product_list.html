@@ -4,7 +4,15 @@
 
 {% block content %}
 
-<h3 class="mb-4">Produtos</h3>
+<div class="d-flex justify-content-between mb-4">
+    <h3>Produtos</h3>
+
+    {% if is_admin %}
+        <a href="{% url 'product_create' %}" class="btn btn-primary">
+            Novo Produto
+        </a>
+    {% endif %}
+</div>
 
 <table class="table table-hover shadow-sm">
     <thead class="table-dark">
@@ -35,16 +43,16 @@
             </td>
 
             <td>
-                <!-- Ver -->
-                <a href="{% url 'product_detail' product.id %}"
-                   class="btn btn-sm btn-outline-primary">
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-primary">
                     Ver
                 </a>
 
-                <!-- Excluir (somente Admin) -->
-                {% if request.user.groups.filter(name='Admin').exists %}
-                    <a href="{% url 'product_delete' product.id %}"
-                       class="btn btn-sm btn-outline-danger">
+                {% if is_admin %}
+                    <a href="{% url 'product_update' product.id %}" class="btn btn-sm btn-outline-warning">
+                        Editar
+                    </a>
+
+                    <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-outline-danger">
                         Excluir
                     </a>
                 {% endif %}

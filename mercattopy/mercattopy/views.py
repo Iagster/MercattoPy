@@ -14,7 +14,6 @@ def dashboard(request):
     month = timezone.now().month
     year = timezone.now().year
 
-    # KPIs
     total_products = Product.objects.count()
     total_categories = Category.objects.count()
 
@@ -24,7 +23,6 @@ def dashboard(request):
         status='completed'
     ).aggregate(total=Sum('total'))['total'] or 0
 
-    # Hoje
     sales_today = Sale.objects.filter(
         status='completed',
         date__date=today
@@ -35,7 +33,6 @@ def dashboard(request):
         date__date=today
     ).aggregate(total=Sum('total'))['total'] or 0
 
-    # Mês
     sales_month = Sale.objects.filter(
         status='completed',
         date__month=month,
@@ -48,10 +45,8 @@ def dashboard(request):
         date__year=year
     ).aggregate(total=Sum('total'))['total'] or 0
 
-    # Últimas vendas
     latest_sales = Sale.objects.order_by('-date')[:5]
 
-    # Top produtos
     top_products = (
         SaleItem.objects
         .values('product__name')
@@ -59,7 +54,6 @@ def dashboard(request):
         .order_by('-total_sold')[:5]
     )
 
-    # Estoque baixo
     low_stock_products = Product.objects.filter(stock__lte=3)
 
     context = {
@@ -80,3 +74,6 @@ def dashboard(request):
     }
 
     return render(request, 'dashboard/dashboard.html', context)
+
+def custom_403(request, exception):
+    return render(request, '403.html', status=403)
